@@ -3,18 +3,25 @@
  * Desenvolvido para o projeto_clima
  */
 
-// Mapeamento de ícones SVG e descrições
+// Mapeamento de ícones (Emojis) e descrições
 const weatherDataMap = {
-    0: { desc: 'Céu limpo', icon: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>' },
-    1: { desc: 'Principalmente limpo', icon: '<svg viewBox="0 0 24 24"><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/><circle cx="12" cy="12" r="5"/></svg>' },
-    2: { desc: 'Parcialmente nublado', icon: '<svg viewBox="0 0 24 24"><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/><path d="M17.5 19a4.5 4.5 0 0 0 .5-9 5 5 0 1 0-9.5-2 4.5 4.5 0 1 0-3 8.5h12z"/></svg>' },
-    3: { desc: 'Encoberto', icon: '<svg viewBox="0 0 24 24"><path d="M17.5 19a4.5 4.5 0 0 0 .5-9 5 5 0 1 0-9.5-2 4.5 4.5 0 1 0-3 8.5h12z"/></svg>' },
-    45: { desc: 'Nevoeiro', icon: '<svg viewBox="0 0 24 24"><path d="M5 10h14M5 14h14M5 18h14"/></svg>' },
-    48: { desc: 'Nevoeiro com geada', icon: '<svg viewBox="0 0 24 24"><path d="M5 10h14M5 14h14M5 18h14M12 6v4"/></svg>' },
-    51: { desc: 'Chuvisco leve', icon: '<svg viewBox="0 0 24 24"><path d="M17.5 19a4.5 4.5 0 0 0 .5-9 5 5 0 1 0-9.5-2 4.5 4.5 0 1 0-3 8.5h12z"/><path d="M8 13v2m4-2v2m4-2v2"/></svg>' },
-    61: { desc: 'Chuva leve', icon: '<svg viewBox="0 0 24 24"><path d="M17.5 19a4.5 4.5 0 0 0 .5-9 5 5 0 1 0-9.5-2 4.5 4.5 0 1 0-3 8.5h12z"/><path d="M8 13l-2 3m6-3l-2 3m6-3l-2 3"/></svg>' },
-    63: { desc: 'Chuva moderada', icon: '<svg viewBox="0 0 24 24"><path d="M17.5 19a4.5 4.5 0 0 0 .5-9 5 5 0 1 0-9.5-2 4.5 4.5 0 1 0-3 8.5h12z"/><path d="M8 13l-2 3m6-3l-2 3m6-3l-2 3"/></svg>' },
-    95: { desc: 'Trovoada', icon: '<svg viewBox="0 0 24 24"><path d="M17.5 19a4.5 4.5 0 0 0 .5-9 5 5 0 1 0-9.5-2 4.5 4.5 0 1 0-3 8.5h12z"/><path d="M13 11l-2 3h3l-2 3"/></svg>' }
+    0: { desc: 'Céu limpo', icon: '☀️' },
+    1: { desc: 'Principalmente limpo', icon: '🌤️' },
+    2: { desc: 'Parcialmente nublado', icon: '⛅' },
+    3: { desc: 'Encoberto', icon: '☁️' },
+    45: { desc: 'Nevoeiro', icon: '🌫️' },
+    48: { desc: 'Nevoeiro com geada', icon: '🌫️' },
+    51: { desc: 'Chuvisco leve', icon: '🌦️' },
+    53: { desc: 'Chuvisco moderado', icon: '🌦️' },
+    55: { desc: 'Chuvisco denso', icon: '🌦️' },
+    61: { desc: 'Chuva leve', icon: '🌧️' },
+    63: { desc: 'Chuva moderada', icon: '🌧️' },
+    65: { desc: 'Chuva forte', icon: '🌧️' },
+    71: { desc: 'Neve leve', icon: '🌨️' },
+    73: { desc: 'Neve moderada', icon: '🌨️' },
+    75: { desc: 'Neve forte', icon: '🌨️' },
+    80: { desc: 'Pancadas de chuva leves', icon: '🌦️' },
+    95: { desc: 'Trovoada', icon: '⛈️' }
 };
 
 // Elementos do DOM
@@ -30,8 +37,11 @@ const windValue = document.getElementById('windValue');
 const descValue = document.getElementById('descValue');
 const loading = document.getElementById('loading');
 const error = document.getElementById('error');
-const welcomeSection = document.getElementById('welcomeSection');
-const quickBtns = document.querySelectorAll('.quick-btn');
+const errorWrapper = document.getElementById('errorWrapper');
+const searchBox = document.getElementById('searchBox');
+
+const backBtn = document.getElementById('backBtn');
+const errorBackBtn = document.getElementById('errorBackBtn');
 
 /**
  * Função principal para buscar o clima
@@ -41,13 +51,15 @@ async function fetchWeather() {
     
     if (!city) {
         error.textContent = 'Por favor, digite o nome de uma cidade.';
-        error.classList.remove('hidden');
+        errorWrapper.classList.remove('hidden');
+        searchBox.classList.add('hidden');
         return;
     }
 
     // Resetar interface
     hideElements();
     loading.classList.remove('hidden');
+    searchBox.classList.add('hidden');
 
     try {
         // 1. Geocodificação: Transformar nome da cidade em coordenadas
@@ -79,7 +91,8 @@ async function fetchWeather() {
         error.textContent = err.message === 'Cidade não encontrada' 
             ? 'Cidade não encontrada. Tente novamente.' 
             : 'Ocorreu um erro ao buscar os dados. Tente novamente.';
-        error.classList.remove('hidden');
+        errorWrapper.classList.remove('hidden');
+        searchBox.classList.add('hidden');
     } finally {
         loading.classList.add('hidden');
     }
@@ -109,6 +122,7 @@ function renderWeather(data, location) {
     mainIcon.innerHTML = weatherInfo.icon;
 
     weatherResult.classList.remove('hidden');
+    searchBox.classList.add('hidden');
 }
 
 /**
@@ -116,20 +130,21 @@ function renderWeather(data, location) {
  */
 function hideElements() {
     weatherResult.classList.add('hidden');
-    error.classList.add('hidden');
-    welcomeSection.classList.add('hidden');
+    errorWrapper.classList.add('hidden');
 }
 
 // Event Listeners
 searchBtn.addEventListener('click', fetchWeather);
 
-// Quick Search buttons
-quickBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        cityInput.value = btn.getAttribute('data-city');
-        fetchWeather();
-    });
-});
+// Back buttons
+const goBack = () => {
+    hideElements();
+    searchBox.classList.remove('hidden');
+    cityInput.value = '';
+};
+
+backBtn.addEventListener('click', goBack);
+errorBackBtn.addEventListener('click', goBack);
 
 // Permitir busca ao pressionar Enter
 cityInput.addEventListener('keypress', (e) => {

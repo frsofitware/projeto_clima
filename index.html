@@ -13,42 +13,39 @@
     </div>
     <div class="container">
         <header>
-            <h1>SkyCast</h1>
-            <p>O tempo em tempo real, em qualquer lugar</p>
+            <span class="header-emoji">🌤️</span>
+            <h1>Como está <br> <span class="serif-inline">o tempo</span> por aí hoje?</h1>
+            <p>Condições meteorológicas em tempo real para qualquer cidade do mundo</p>
         </header>
 
         <main>
-            <section class="search-box">
+            <section id="searchBox" class="search-box">
                 <input type="text" id="cityInput" placeholder="Digite o nome da cidade..." aria-label="Nome da cidade">
                 <button id="searchBtn">Buscar</button>
             </section>
 
-            <section id="welcomeSection" class="welcome-section">
-                <div class="welcome-content">
-                    <div class="welcome-icon">🌍</div>
-                    <h2>Explore o Clima</h2>
-                    <p>Descubra as condições meteorológicas em tempo real para qualquer cidade do mundo.</p>
-                    <div class="quick-searches">
-                        <button class="quick-btn" data-city="São Paulo">São Paulo</button>
-                        <button class="quick-btn" data-city="Rio de Janeiro">Rio de Janeiro</button>
-                        <button class="quick-btn" data-city="Lisboa">Lisboa</button>
-                        <button class="quick-btn" data-city="Londres">Londres</button>
-                    </div>
-                </div>
-            </section>
-
             <section id="weatherResult" class="weather-result hidden">
-                <div class="weather-hero">
-                    <div id="mainIcon" class="main-weather-icon"></div>
-                    <div class="main-temp">
-                        <span id="tempValue">--</span><span class="unit-large">°C</span>
-                    </div>
-                    <h2 id="displayName">Cidade</h2>
-                    <p id="descValue" class="weather-desc">Condição</p>
+                <div class="weather-actions">
+                    <button id="backBtn" class="back-btn">← Voltar</button>
                 </div>
                 
-                <div class="weather-details-grid">
-                    <div class="detail-card">
+                <div class="bento-grid">
+                    <!-- Main Card -->
+                    <div class="bento-item main-card">
+                        <div class="main-card-row">
+                            <div id="mainIcon" class="main-weather-icon"></div>
+                            <div class="main-temp">
+                                <span id="tempValue">--</span><span class="unit-large">°C</span>
+                            </div>
+                            <div class="main-location-info">
+                                <h2 id="displayName">Cidade</h2>
+                                <p id="descValue" class="weather-desc">Condição</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detail Cards -->
+                    <div class="bento-item detail-card">
                         <div class="detail-icon">🌡️</div>
                         <div class="detail-info">
                             <span class="label">Sensação</span>
@@ -56,7 +53,7 @@
                         </div>
                     </div>
 
-                    <div class="detail-card">
+                    <div class="bento-item detail-card">
                         <div class="detail-icon">💧</div>
                         <div class="detail-info">
                             <span class="label">Humidade</span>
@@ -64,7 +61,7 @@
                         </div>
                     </div>
                     
-                    <div class="detail-card">
+                    <div class="bento-item detail-card">
                         <div class="detail-icon">💨</div>
                         <div class="detail-info">
                             <span class="label">Vento</span>
@@ -75,7 +72,12 @@
             </section>
 
             <div id="loading" class="loading hidden">Buscando informações...</div>
-            <div id="error" class="error hidden">Cidade não encontrada. Tente novamente.</div>
+            <div id="errorWrapper" class="hidden">
+                <div id="error" class="error">Cidade não encontrada. Tente novamente.</div>
+                <div class="weather-actions" style="justify-content: center; margin-top: 15px;">
+                    <button id="errorBackBtn" class="back-btn">← Voltar</button>
+                </div>
+            </div>
         </main>
 
         <footer>
