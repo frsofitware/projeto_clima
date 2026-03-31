@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projeto Clima - Previsão do Tempo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.min.css">
     <link rel="stylesheet" href='./assets/css/style.css'>
 </head>
 <body>
@@ -24,6 +25,12 @@
                 <button id="searchBtn">Buscar</button>
             </section>
 
+            <section id="selectionBox" class="selection-box hidden">
+                <h3>Selecione a localização correta:</h3>
+                <div id="cityList" class="city-list"></div>
+                <button id="cancelSelection" class="back-btn" style="margin-top: 16px; width: 100%; justify-content: center;">Cancelar</button>
+            </section>
+
             <section id="weatherResult" class="weather-result hidden">
                 <div class="weather-actions">
                     <button id="backBtn" class="back-btn">← Voltar</button>
@@ -38,6 +45,7 @@
                                 <span id="tempValue">--</span><span class="unit-large">°C</span>
                             </div>
                             <div class="main-location-info">
+                                <span id="dateDisplay" class="current-date"></span>
                                 <h2 id="displayName">Cidade</h2>
                                 <p id="descValue" class="weather-desc">Condição</p>
                             </div>
@@ -46,7 +54,7 @@
 
                     <!-- Detail Cards -->
                     <div class="bento-item detail-card">
-                        <div class="detail-icon">🌡️</div>
+                        <div class="detail-icon"><i class="wi wi-thermometer"></i></div>
                         <div class="detail-info">
                             <span class="label">Sensação</span>
                             <span class="value"><span id="feelsLikeValue">--</span>°C</span>
@@ -54,7 +62,7 @@
                     </div>
 
                     <div class="bento-item detail-card">
-                        <div class="detail-icon">💧</div>
+                        <div class="detail-icon"><i class="wi wi-humidity"></i></div>
                         <div class="detail-info">
                             <span class="label">Humidade</span>
                             <span class="value"><span id="humidityValue">--</span>%</span>
@@ -62,7 +70,7 @@
                     </div>
                     
                     <div class="bento-item detail-card">
-                        <div class="detail-icon">💨</div>
+                        <div class="detail-icon"><i class="wi wi-strong-wind"></i></div>
                         <div class="detail-info">
                             <span class="label">Vento</span>
                             <span class="value"><span id="windValue">--</span> <small>km/h</small></span>
@@ -88,3 +96,4 @@
     <script type="module" src='./assets/js/api.js'></script>
 </body>
 </html>
+
