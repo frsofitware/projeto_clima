@@ -32,6 +32,10 @@ describe('Módulo de Clima - Integração Open-Meteo', () => {
     test('Deve retornar erro de validação para entrada vazia', () => {
       expect(() => validarCidade("")).toThrow("O nome da cidade não pode estar vazio.");
     });
+
+    test('Deve retornar erro de validação para entrada contendo apenas espaços', () => {
+      expect(() => validarCidade("   ")).toThrow("O nome da cidade não pode estar vazio.");
+    });
   });
 
   describe('2. Geocodificação (buscarCoordenadas)', () => {
@@ -77,20 +81,12 @@ describe('Módulo de Clima - Integração Open-Meteo', () => {
     });
 
     test('Deve tratar erro 429 (Limite de requisições excedido)', async () => {
-      fetch.mockResolvedValueOnce({
-        ok: false,
-        status: 429
-      });
-
+      fetch.mockResolvedValueOnce({ ok: false, status: 429 });
       await expect(buscarClima(0, 0)).rejects.toThrow('Limite de requisições excedido. Tente novamente mais tarde.');
     });
 
     test('Deve tratar falha técnica da API (Erro 500)', async () => {
-      fetch.mockResolvedValueOnce({
-        ok: false,
-        status: 500
-      });
-
+      fetch.mockResolvedValueOnce({ ok: false, status: 500 });
       await expect(buscarClima(0, 0)).rejects.toThrow('Erro no servidor da API.');
     });
   });
@@ -99,15 +95,14 @@ describe('Módulo de Clima - Integração Open-Meteo', () => {
     test('Deve lidar com formato JSON inesperado ou incompleto', async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ dado_aleatorio: "vazio" }), // Faltando o nó "current"
+        json: async () => ({ dado_aleatorio: "vazio" }),
       });
-
       await expect(buscarClima(0, 0)).rejects.toThrow('Formato de resposta inválido.');
     });
 
     test('Deve lidar com falha na conexão de rede (timeout simulado)', async () => {
       fetch.mockRejectedValueOnce(new Error('Network Timeout'));
-      await expect(buscarClima(0, 0)).rejects.toThrow('Falha na conexão de rede.'); // Nota: O Fetch API traduz isso para a mensagem de erro que cai no throw
+      await expect(buscarClima(0, 0)).rejects.toThrow('Falha na conexão de rede.');
     });
   });
 });

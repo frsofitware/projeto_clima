@@ -1,9 +1,14 @@
 /**
- * api.js - Lógica de consumo da API Open-Meteo
+ * @fileoverview api.js - Lógica de consumo da API Open-Meteo
  * Desenvolvido com foco em resiliência, modularidade e UX.
  */
 
 // --- CONFIGURAÇÃO E MAPEAMENTO ---
+
+/**
+ * Mapeamento de códigos meteorológicos da Open-Meteo para classes da biblioteca Weather Icons.
+ * @constant {Object}
+ */
 const WEATHER_CONFIG = {
     0: { desc: 'Céu limpo', dayIcon: 'wi-day-sunny', nightIcon: 'wi-night-clear' },
     1: { desc: 'Principalmente limpo', dayIcon: 'wi-day-cloudy', nightIcon: 'wi-night-alt-cloudy' },
@@ -50,6 +55,14 @@ const elements = {
 
 // --- FUNÇÕES DE DADOS / API (Testáveis) ---
 
+/**
+ * Valida a entrada do usuário para o nome da cidade.
+ * * @param {string} cidade - O nome da cidade digitada no input.
+ * @returns {string} O nome da cidade sem espaços desnecessários nas bordas.
+ * @throws {Error} Se o nome da cidade for vazio ou contiver apenas espaços.
+ * @example
+ * const nome = validarCidade("  São Paulo  "); // Retorna "São Paulo"
+ */
 function validarCidade(cidade) {
     if (!cidade || cidade.trim() === '') {
         throw new Error("O nome da cidade não pode estar vazio.");
@@ -57,6 +70,15 @@ function validarCidade(cidade) {
     return cidade.trim();
 }
 
+/**
+ * Busca as coordenadas geográficas (latitude e longitude) de uma cidade.
+ * * @async
+ * @param {string} cidade - O nome da cidade para buscar.
+ * @returns {Promise<Array>} Um array de objetos contendo os resultados geográficos.
+ * @throws {Error} Se houver falha na rede ou a cidade não for encontrada.
+ * @example
+ * const coords = await buscarCoordenadas("Rio de Janeiro");
+ */
 async function buscarCoordenadas(cidade) {
     const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cidade)}&count=20&language=pt&format=json`;
     const response = await fetch(geoUrl);
@@ -70,19 +92,27 @@ async function buscarCoordenadas(cidade) {
     return data.results;
 }
 
+/**
+ * Busca os dados meteorológicos atuais com base nas coordenadas.
+ * * @async
+ * @param {number} lat - Latitude da localização.
+ * @param {number} lon - Longitude da localização.
+ * @returns {Promise<Object>} Objeto contendo os dados climáticos atuais (temperatura, vento, etc).
+ * @throws {Error} Se houver erro de rede, limite de requisições ou resposta inválida.
+ * @example
+ * const clima = await buscarClima(-22.90, -43.17);
+ */
 async function buscarClima(lat, lon) {
     const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m`;
     
     let response;
     
-    // Intercepta erros físicos da rede (timeout, sem internet)
     try {
         response = await fetch(weatherUrl);
     } catch (error) {
         throw new Error('Falha na conexão de rede.');
     }
     
-    // Intercepta erros lógicos da API
     if (!response.ok) {
         if (response.status === 429) throw new Error('Limite de requisições excedido. Tente novamente mais tarde.');
         if (response.status >= 500) throw new Error('Erro no servidor da API.');
@@ -97,11 +127,21 @@ async function buscarClima(lat, lon) {
 
 // --- FUNÇÕES AUXILIARES E DE INTERFACE ---
 
+/**
+ * Gera a data atual formatada de forma legível em português.
+ * * @returns {string} Data no formato "dia da semana, dia de mês de ano".
+ * @example
+ * const data = getFormattedDate(); // "segunda-feira, 13 de outubro de 2025"
+ */
 function getFormattedDate() {
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     return new Intl.DateTimeFormat('pt-BR', options).format(new Date());
 }
 
+/**
+ * Atualiza o tema da interface para claro (dia) ou escuro (noite).
+ * * @param {number} isDay - 1 para dia, 0 para noite.
+ */
 function updateTheme(isDay) {
     if (isDay === 1) {
         document.body.classList.add('day-mode');
@@ -112,6 +152,10 @@ function updateTheme(isDay) {
     }
 }
 
+/**
+ * Exibe uma mensagem de erro na interface do usuário.
+ * * @param {string} message - A mensagem de erro a ser exibida.
+ */
 function showError(message) {
     if(elements.error) elements.error.textContent = message;
     elements.errorWrapper?.classList.remove('hidden');
@@ -120,6 +164,9 @@ function showError(message) {
     elements.loading?.classList.add('hidden');
 }
 
+/**
+ * Reseta o estado da interface, escondendo os modais e carregamentos.
+ */
 function resetUI() {
     elements.weatherResult?.classList.add('hidden');
     elements.selectionBox?.classList.add('hidden');
@@ -129,6 +176,11 @@ function resetUI() {
 
 // --- LÓGICA PRINCIPAL ---
 
+/**
+ * Função principal que orquestra a busca, geocodificação e tratamento de resultados.
+ * Acionada pelo botão de busca ou tecla Enter.
+ * * @async
+ */
 async function startSearch() {
     try {
         const city = validarCidade(elements.cityInput?.value);
@@ -170,6 +222,11 @@ async function startSearch() {
     }
 }
 
+/**
+ * Remove localizações duplicadas do resultado da API com base em aproximação geográfica.
+ * * @param {Array} results - Lista bruta de resultados da API.
+ * @returns {Array} Lista filtrada sem resultados geograficamente ou nominalmente idênticos.
+ */
 function filterUniqueLocations(results) {
     const seenLabels = new Set();
     const seenCoords = new Set();
@@ -187,12 +244,21 @@ function filterUniqueLocations(results) {
     });
 }
 
+/**
+ * Formata um objeto de cidade em uma string legível.
+ * * @param {Object} cityData - Objeto contendo os dados da cidade.
+ * @returns {string} Rótulo formatado (ex: "São Paulo, São Paulo - Brazil").
+ */
 function formatLocationLabel(cityData) {
     const { name, admin1, country } = cityData;
     const statePart = admin1 ? `, ${admin1}` : '';
     return `${name}${statePart} - ${country}`;
 }
 
+/**
+ * Renderiza uma lista de botões para o usuário desempatar cidades com nomes iguais.
+ * * @param {Array} results - Lista de cidades únicas filtradas.
+ */
 function displayCitySelection(results) {
     if(!elements.cityList) return;
     elements.cityList.innerHTML = '';
@@ -215,6 +281,13 @@ function displayCitySelection(results) {
     elements.loading?.classList.add('hidden');
 }
 
+/**
+ * Busca o clima final da cidade selecionada e aciona a renderização na tela.
+ * * @async
+ * @param {number} lat - Latitude exata.
+ * @param {number} lon - Longitude exata.
+ * @param {string} label - Nome amigável formatado da cidade.
+ */
 async function fetchWeather(lat, lon, label) {
     resetUI();
     elements.loading?.classList.remove('hidden');
@@ -231,6 +304,11 @@ async function fetchWeather(lat, lon, label) {
     }
 }
 
+/**
+ * Preenche os elementos do HTML com os dados meteorológicos recuperados.
+ * * @param {Object} data - Objeto de dados climáticos retornados pela API.
+ * @param {string} location - Nome da cidade formatado.
+ */
 function renderWeather(data, location) {
     const { 
         temperature_2m: temp, 
@@ -260,7 +338,7 @@ function renderWeather(data, location) {
     elements.searchBox?.classList.add('hidden');
 }
 
-// --- EVENT LISTENERS (Com Optional Chaining para evitar erros no Jest) ---
+// --- EVENT LISTENERS ---
 elements.searchBtn?.addEventListener('click', startSearch);
 elements.cityInput?.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') startSearch();
