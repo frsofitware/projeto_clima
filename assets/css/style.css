@@ -861,3 +861,20 @@ body.night-mode .temp-item.min .temp-value {
         font-size: 0.85rem;
     }
 }
+
+.disclaimer {
+    margin-top: 16px;
+    font-size: 0.7rem;
+    opacity: 0.5;
+    line-height: 1.5;
+    font-family: 'Inter', sans-serif;
+}
+
+.disclaimer strong {
+    font-weight: 700;
+}
+
+.disclaimer a {
+    text-decoration: underline;
+    color: inherit;
+}

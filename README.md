@@ -1,56 +1,87 @@
-# 🌤️ Projeto Clima (Weather App)
+# 🌤️ Projeto Clima - Previsão do Tempo
 
-Uma aplicação web robusta, desenvolvida em JavaScript Vanilla, que fornece previsões meteorológicas em tempo real baseadas na localização pesquisada. Este projeto foi construído com foco em resiliência, boas práticas de engenharia de software e excelente Experiência do Usuário (UX).
+![Status](https://img.shields.io/badge/Status-Concluído-brightgreen)
+![License](https://img.shields.io/badge/License-MIT-blue)
+![Tech](https://img.shields.io/badge/Tech-Vanilla%20JS-yellow)
 
-## ✨ Funcionalidades
+Uma aplicação web moderna, ultra-rápida e responsiva para consulta de condições meteorológicas em tempo real. Este projeto foi desenvolvido com foco em **performance**, **privacidade** e **conformidade legal**, utilizando a API pública do [Open-Meteo](https://open-meteo.com/).
 
-- **Busca Precisa:** Geocodificação integrada para diferenciar cidades homônimas (ex: Rio de Janeiro, Brasil vs Rio de Janeiro, México).
-- **Clima em Tempo Real:** Retorna temperatura atual, sensação térmica, umidade, velocidade do vento e condição meteorológica detalhada.
-- **UI Responsiva e Dinâmica:** A interface altera seu tema visual automaticamente (claro/escuro) dependendo do estado do dia (dia ou noite) na cidade pesquisada.
-- **Tratamento de Exceções Avançado:** Feedback claro e amigável para o usuário em casos de cidades não encontradas, falhas de conexão de rede ou limites de requisição da API.
-- **Código Coberto por Testes:** Lógica de consumo de API blindada contra regressões através de testes unitários automatizados.
+---
 
-## 🛠️ Tecnologias Utilizadas
+## 🚀 Funcionalidades Principais
 
-- **Frontend:** HTML5, CSS3, JavaScript (Vanilla ES6+).
-- **APIs de Dados:** [Open-Meteo API](https://open-meteo.com/) (Geocoding & Forecast).
-- **Testes Unitários:** Jest e JSDOM.
-- **Ícones:** Biblioteca [Weather Icons](https://erikflowers.github.io/weather-icons/).
-- **Documentação de Código:** JSDoc (Padrão de documentação de mercado).
+- **Previsão de 5 Dias:** Visualização detalhada das condições meteorológicas para a semana, com ícones dinâmicos e extremos de temperatura.
+- **Cache Inteligente (LocalStorage):** Implementação de uma camada de cache com TTL (Time-To-Live) de 10 minutos, otimizando o consumo de banda e reduzindo a latência para o usuário.
+- **Interface Bento Grid:** Layout contemporâneo e modular que se adapta perfeitamente a qualquer tamanho de tela.
+- **Modo Adaptativo (Dia/Noite):** A interface ajusta automaticamente seu esquema de cores com base no horário e nas condições climáticas da cidade buscada.
+- **Busca Inteligente:** Geocodificação integrada que permite encontrar cidades em qualquer lugar do mundo com sugestões de seleção.
 
-## 🚀 Como Executar o Projeto Localmente
+---
 
-### Pré-requisitos
-Para visualizar a aplicação no navegador, não é necessário nenhum software adicional. No entanto, para executar a suíte de testes automatizados, você precisará ter o [Node.js](https://nodejs.org/) instalado em sua máquina.
+## 🛠️ Tecnologias e Arquitetura
 
-### Passo a passo (Aplicação)
-1. Clone este repositório:
-   ```bash
-   git clone https://github.com/frsofitware/projeto_clima.git
-   ```
-2. Navegue até a pasta do projeto:
-   ```bash
-   cd projeto_clima
-   ```
-3. Abra o arquivo `index.html` em seu navegador de preferência, ou utilize a extensão **Live Server** do VS Code para uma melhor experiência.
+- **Core:** HTML5 Semântico e CSS3 Moderno (Custom Properties).
+- **Lógica:** JavaScript Vanilla (ES6+) - Sem frameworks pesados para garantir o menor tempo de carregamento possível.
+- **API de Dados:** [Open-Meteo](https://open-meteo.com/) (Sem necessidade de API Key, garantindo maior segurança no frontend).
+- **Ícones:** [Weather Icons](https://erikflowers.github.io/weather-icons/) (Mapeamento customizado via código meteorológico).
+- **Testes:** Suíte de testes automatizados com **Jest** e **JSDOM**, cobrindo validações de entrada, geocodificação e lógica de cache.
 
-### Passo a passo (Testes Automatizados)
-1. Certifique-se de estar na raiz do projeto via terminal.
-2. Instale as dependências de desenvolvimento:
+---
+
+## 🛡️ Segurança, Privacidade e Conformidade
+
+Este projeto adota o princípio de **Privacy by Design**:
+
+### 1. Privacidade do Usuário
+- **Zero GPS:** Não solicitamos acesso à geolocalização exata do navegador. A privacidade do usuário é preservada, utilizando apenas a entrada voluntária do nome da cidade.
+- **Nenhum PII (Personally Identifiable Information):** Não coletamos, processamos ou armazenamos nomes, e-mails ou qualquer dado pessoal.
+
+### 2. Segurança de Dados
+- **Cache Local:** O uso do `localStorage` é estritamente técnico, armazenando apenas dados meteorológicos públicos e nomes de cidades para fins de performance.
+- **HTTPS:** Todas as comunicações com a API Open-Meteo são criptografadas via TLS.
+
+### 3. Conformidade Legal
+- **Licenciamento Open Source:** O código fonte está sob a licença **MIT**.
+- **Atribuição de Dados:** Em total conformidade com a licença **CC BY 4.0** da Open-Meteo.
+- **Atribuição de Ativos:** Respeito às licenças **SIL OFL 1.1** e **MIT** dos ícones e fontes utilizados.
+
+---
+
+## 📂 Estrutura do Projeto
+
+```text
+├── css/            # Estilos (Variáveis, Bento Grid, Temas)
+├── js/             # Lógica da Aplicação (API, Cache, UI)
+├── tests/          # Suíte de Testes (Jest)
+├── index.html      # Estrutura Principal
+├── LICENSE         # Licença MIT (EN/PT)
+├── NOTICE.md       # Créditos e Atribuições Legais
+└── package.json    # Dependências e Scripts
+```
+
+---
+
+## 🧪 Desenvolvimento e Testes
+
+Para rodar o projeto localmente ou executar os testes:
+
+1. **Instalar dependências:**
    ```bash
    npm install
    ```
-3. Execute a suíte de testes com o Jest:
+
+2. **Executar testes:**
    ```bash
    npm test
    ```
 
-## 🧠 Arquitetura e Decisões Técnicas
+3. **Desenvolvimento (Vite):**
+   ```bash
+   npm run dev
+   ```
 
-O arquivo `api.js` foi estruturado utilizando o princípio de **Separação de Responsabilidades (Separation of Concerns)**. As funções fundamentais que realizam as requisições HTTP (`fetch`) e as validações de dados são independentes da manipulação direta do DOM. 
+---
 
-Esta decisão de design permite que o "motor" da aplicação seja inteiramente testado em um ambiente Node.js isolado (via Jest) sem a necessidade de um navegador real. Utilizamos *Mocks* para simular respostas da API, permitindo validar o comportamento do software em cenários extremos, como timeouts de rede ou formatos de dados inesperados, garantindo a estabilidade do sistema.
+## 📄 Licença e Créditos
 
-## 📄 Licença
-
-Distribuído sob a licença MIT. Consulte o arquivo `LICENSE` para mais informações.
+Este software é distribuído sob a licença MIT. Os dados meteorológicos são fornecidos por [Open-Meteo.com](https://open-meteo.com/). Para mais detalhes sobre créditos de terceiros, consulte o arquivo [NOTICE.md](NOTICE.md).
