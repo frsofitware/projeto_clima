@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projeto Clima - Previsão do Tempo</title>
+    <meta name="description" content="Previsão do tempo em tempo real com busca inteligente de cidades e interface moderna.">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.min.css">
     <link rel="stylesheet" href='./assets/css/style.css'>
 </head>
@@ -39,15 +40,29 @@
                 <div class="bento-grid">
                     <!-- Main Card -->
                     <div class="bento-item main-card">
+                        <span id="dateDisplay" class="current-date"></span>
                         <div class="main-card-row">
-                            <div id="mainIcon" class="main-weather-icon"></div>
-                            <div class="main-temp">
-                                <span id="tempValue">--</span><span class="unit-large">°C</span>
-                            </div>
                             <div class="main-location-info">
-                                <span id="dateDisplay" class="current-date"></span>
                                 <h2 id="displayName">Cidade</h2>
+                            </div>
+                            <div class="main-weather-status">
+                                <div id="mainIcon" class="main-weather-icon"></div>
                                 <p id="descValue" class="weather-desc">Condição</p>
+                            </div>
+                            <div class="main-temp">
+                                <div class="temp-current">
+                                    <span id="tempValue">--</span><span class="unit-large">°C</span>
+                                </div>
+                                <div class="main-extremes">
+                                    <div class="extreme-item max">
+                                        <span class="extreme-label">MÁX</span>
+                                        <span id="todayMax" class="extreme-value">--</span>°
+                                    </div>
+                                    <div class="extreme-item min">
+                                        <span class="extreme-label">MÍN</span>
+                                        <span id="todayMin" class="extreme-value">--</span>°
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -76,6 +91,14 @@
                             <span class="value"><span id="windValue">--</span> <small>km/h</small></span>
                         </div>
                     </div>
+
+                    <!-- 5-Day Forecast -->
+                    <div class="bento-item forecast-section">
+                        <h3>Próximos 5 dias</h3>
+                        <div id="forecastContainer" class="forecast-container">
+                            <!-- Cards de previsão serão injetados aqui -->
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -96,4 +119,3 @@
     <script type="module" src='./assets/js/api.js'></script>
 </body>
 </html>
-
