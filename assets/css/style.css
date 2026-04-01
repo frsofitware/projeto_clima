@@ -635,49 +635,6 @@ footer a {
     animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Responsividade */
-@media (max-width: 580px) {
-    .bento-grid {
-        grid-template-columns: 1fr;
-    }
-    .main-card {
-        grid-column: span 1;
-        padding: 40px 24px;
-    }
-    .main-card-row {
-        flex-direction: column;
-        text-align: center;
-        gap: 24px;
-    }
-    .main-temp {
-        align-items: center;
-    }
-    .main-extremes {
-        justify-content: center;
-    }
-    .main-weather-icon {
-        font-size: 5.5rem;
-        width: 100px;
-        height: 100px;
-    }
-    .temp-current {
-        font-size: 5rem;
-    }
-    .main-location-info {
-        text-align: center;
-        align-items: center;
-    }
-    .detail-card {
-        grid-column: span 1;
-    }
-    .container {
-        padding: 10px;
-    }
-    header h1 {
-        font-size: 2.4rem;
-    }
-}
-
 /* 5-Day Forecast Styles */
 .forecast-section {
     grid-column: span 3;
@@ -814,7 +771,7 @@ body.night-mode .forecast-card:hover {
 }
 
 .temp-item.max .temp-value {
-    color: var(--text-primary); /* Neutral color for max */
+    color: var(--text-primary);
 }
 
 body.night-mode .temp-item.max .temp-value {
@@ -822,7 +779,7 @@ body.night-mode .temp-item.max .temp-value {
 }
 
 .temp-item.min .temp-value {
-    color: var(--text-secondary); /* Neutral color for min */
+    color: var(--text-secondary);
     opacity: 0.7;
 }
 
@@ -830,35 +787,137 @@ body.night-mode .temp-item.min .temp-value {
     color: var(--text-secondary);
 }
 
-@media (max-width: 580px) {
-    .forecast-section {
-        grid-column: span 1;
-        padding: 20px;
+/* Responsividade Refinada */
+
+/* Tablets e Telas Médias */
+@media (max-width: 768px) {
+    .container {
+        max-width: 100%;
+        padding: 15px;
     }
-    
-    .forecast-card {
-        padding: 20px;
+
+    header h1 {
+        font-size: 2.8rem;
+    }
+
+    .bento-grid {
+        gap: 20px;
+    }
+
+    .main-card {
+        padding: 32px;
+    }
+
+    .main-card-row {
+        gap: 24px;
+    }
+
+    .forecast-section {
+        padding: 32px;
+    }
+}
+
+/* Celulares (Mobile) */
+@media (max-width: 580px) {
+    header h1 {
+        font-size: 2.2rem;
+    }
+
+    .bento-grid {
         grid-template-columns: 1fr;
         gap: 16px;
+    }
+
+    .main-card {
+        grid-column: span 1;
+        padding: 32px 20px;
+        border-radius: 32px;
+    }
+
+    .main-card-row {
+        flex-direction: column;
+        text-align: center;
+        gap: 24px;
+    }
+
+    .main-weather-status {
+        order: -1; /* Ícone no topo no mobile */
+    }
+
+    .main-temp {
+        align-items: center;
+    }
+
+    .main-extremes {
+        justify-content: center;
+    }
+
+    .main-weather-icon {
+        font-size: 4.5rem;
+    }
+
+    .temp-current {
+        font-size: 4.5rem;
+    }
+
+    .detail-card {
+        grid-column: span 1;
+        justify-content: center;
+        padding: 12px 16px;
+    }
+
+    .forecast-section {
+        grid-column: span 1;
+        padding: 24px 16px;
+        border-radius: 32px;
+    }
+
+    .forecast-card {
+        padding: 16px;
+        grid-template-columns: 1fr;
+        gap: 12px;
         justify-items: center;
         text-align: center;
     }
-    
-    .forecast-header {
-        width: 100%;
-    }
-    
+
     .forecast-status {
-        width: 100%;
+        flex-direction: row;
+        gap: 15px;
     }
-    
+
     .forecast-temps {
-        width: 100%;
         justify-content: center;
+        width: 100%;
     }
-    
-    .forecast-weekday {
-        font-size: 0.85rem;
+
+    .search-box {
+        flex-direction: column;
+        border-radius: 24px;
+        padding: 12px;
+    }
+
+    input[type="text"] {
+        text-align: center;
+        padding: 10px;
+    }
+
+    button#searchBtn {
+        width: 100%;
+    }
+}
+
+/* Telas muito pequenas (iPhone SE, etc) */
+@media (max-width: 380px) {
+    header h1 {
+        font-size: 1.8rem;
+    }
+
+    .temp-current {
+        font-size: 3.5rem;
+    }
+
+    .main-weather-icon {
+        font-size: 3.5rem;
     }
 }
 
